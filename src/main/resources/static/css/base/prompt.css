@@ -1,0 +1,29 @@
+.prompt{
+    display: none;
+    height: 30px;
+    width: 800px;
+   /* margin: 10px auto;*/
+    text-align: center;
+    padding-top: 10px;
+    font-family: 'DejaVu Serif', Georgia, "Times New Roman", Times, serif;
+    font-size: medium;
+    border-radius: 10px 10px 10px 10px;
+    position: fixed;
+    margin-left: auto;
+    margin-right: auto;
+    top: 50px;
+    left: 0;
+    right: 0;
+
+
+}
+.prompt.success{
+
+    background-color: rgba(17,208,47,0.4);
+    color: white;
+}
+.prompt.fault{
+
+    background-color: rgba(255, 17, 31, 0.8);
+    color: white;
+}

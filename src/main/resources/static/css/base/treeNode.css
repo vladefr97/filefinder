@@ -1,0 +1,25 @@
+
+.tree-node {
+    position: relative;
+    font-family: 'DejaVu Serif', Georgia, "Times New Roman", Times, serif;
+    font-size: 14px;
+}
+
+.tree-node span {
+
+    position: absolute;
+    left: 40px;
+    top: 10px;
+}
+
+.tree-node-selected {
+    background-color: rgba(58, 66, 222, 0.6);
+    border-radius: 3px;
+}
+
+.tree-node:hover{
+    cursor: pointer;
+    background-color: rgba(134, 196, 247, 0.5);
+    border-radius: 3px;
+}
+

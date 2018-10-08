@@ -1,0 +1,40 @@
+
+.file-header {
+    background-image: url("https://icon-icons.com/icons2/93/PNG/32/page_document_16748.png");
+    background-repeat: no-repeat;
+    position: relative;
+    font-family: 'DejaVu Serif', Georgia, "Times New Roman", Times, serif;
+    font-size: 14px;
+    padding: 10px 35px;
+    margin: 5px 0;
+    border: 2px solid rgba(85, 131, 255, 0.66);
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 0 10px rgba(85, 131, 255, 0.66);
+}
+
+.file-header span {
+
+    position: absolute;
+    left: 40px;
+    top: 10px;
+}
+
+.file-header-selected {
+
+    background-color: rgba(58, 66, 222, 0.6);
+    border-radius: 3px;
+}
+
+.file-header:hover {
+    cursor: pointer;
+    background-color: rgba(134, 196, 247, 0.5);
+    border-radius: 3px;
+}
+
+.file-content {
+    display: none;
+}
+
+.file-content.visible {
+    display: block;
+}
