@@ -27,6 +27,21 @@ public class DataController {
 
     }
 
+    @RequestMapping(value="/getNodeFiles", method = RequestMethod.GET)
+    public FileModel[] getNodeFiles(@RequestParam("filePath") String filePath){
+        filePath = filePath.replace("<prefix>", "/");
+        log.info("Opening: " + filePath);
+        File file = new File("/" + filePath);
+
+
+        File[] resultFiles = file.listFiles();
+        if (resultFiles == null) return null;
+        FileModel[] fileModels = new FileModel[resultFiles.length];
+
+        for (int i = 0; i < fileModels.length; i++)
+            fileModels[i] = new FileModel(resultFiles[i].getName(), resultFiles[i].getAbsolutePath(), resultFiles[i].isDirectory());
+        return fileModels;
+    }
     @RequestMapping(value = "/getFilesByText", method = RequestMethod.GET)
     public ServerAnswer getFilesByText(@RequestParam("selectedDirectory") String dirPath, @RequestParam("text") String text, @RequestParam("fileFormat") String fileFormat) throws IOException {
         File file = new File(dirPath);
