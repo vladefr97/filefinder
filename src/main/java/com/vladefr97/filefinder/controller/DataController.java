@@ -116,6 +116,7 @@ public class DataController {
 
     private static List<FileView> findAllFilesInDirectory(File file, String fileFormat, String text) {
 
+        try {
         log.info("exploring file: " + file.getAbsolutePath());
         if (file.isDirectory()) {
             File[] childFiles = Objects.requireNonNull(file.listFiles());
@@ -128,17 +129,18 @@ public class DataController {
             return finalList;
         } else {
             List<FileView> resultList = new ArrayList<>();
-            try {
+
                 if (file.getName().endsWith(fileFormat)) {
                     String content = readUsingScanner(file.getAbsolutePath());
                     if (content.contains(text))
                         resultList.add(new FileView(file.getName(), content));
                 } else return null;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
+
             return resultList;
+        }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
 
 
