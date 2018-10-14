@@ -27,8 +27,8 @@ public class DataController {
 
     }
 
-    @RequestMapping(value="/getNodeFiles", method = RequestMethod.GET)
-    public FileModel[] getNodeFiles(@RequestParam("filePath") String filePath){
+    @RequestMapping(value = "/getNodeFiles", method = RequestMethod.GET)
+    public FileModel[] getNodeFiles(@RequestParam("filePath") String filePath) {
         filePath = filePath.replace("<prefix>", "/");
         log.info("Opening: " + filePath);
         File file = new File("/" + filePath);
@@ -42,24 +42,11 @@ public class DataController {
             fileModels[i] = new FileModel(resultFiles[i].getName(), resultFiles[i].getAbsolutePath(), resultFiles[i].isDirectory());
         return fileModels;
     }
+
     @RequestMapping(value = "/getFilesByText", method = RequestMethod.GET)
     public ServerAnswer getFilesByText(@RequestParam("selectedDirectory") String dirPath, @RequestParam("text") String text, @RequestParam("fileFormat") String fileFormat) throws IOException {
         File file = new File(dirPath);
         List<FileView> fileViewList;
-
-     /*   try {
-
-            if (!file.isDirectory()) {
-                fileViewList.add(new FileView(file.getName(), readUsingScanner(file.getAbsolutePath())));
-            } else {
-                log.info("reading File");
-                File[] fileList = Objects.requireNonNull(file.listFiles(file1 -> file1.getName().endsWith(fileFormat)));
-                for (File aFileList : fileList)
-                    fileViewList.add(new FileView(aFileList.getName(), readUsingScanner(aFileList.getAbsolutePath())));
-            }
-        } catch (Exception e) {
-            return new ServerAnswer<>(new Message(e.toString(), false), null);
-        }*/
 
         log.info("Started finding files...");
         fileViewList = findAllFilesInDirectory(file, fileFormat, text);
@@ -84,7 +71,7 @@ public class DataController {
 
     }
 
-
+/*
     @RequestMapping("/getFile/{filePath}")
     public FileModel[] getChildFiles(@PathVariable String filePath) {
 
@@ -100,7 +87,7 @@ public class DataController {
         for (int i = 0; i < fileModels.length; i++)
             fileModels[i] = new FileModel(resultFiles[i].getName(), resultFiles[i].getAbsolutePath(), resultFiles[i].isDirectory());
         return fileModels;
-    }
+    }*/
 
     @RequestMapping("/getFileText/{filePath}")
     public String getFileText(@PathVariable String filePath) throws IOException {
@@ -185,7 +172,7 @@ public class DataController {
         return resultString.toString();
     }
 
-    private static String readUsingScanner(String fileName) throws IOException, NoSuchElementException {
+    private static String readUsingScanner(String fileName) throws IOException, NoSuchElementException, NullPointerException {
         Scanner scanner = new Scanner(Paths.get(fileName), StandardCharsets.UTF_8.name());
         //здесь мы можем использовать разделитель, например: "\\A", "\\Z" или "\\z"
         String data = scanner.useDelimiter("\\A").next();

@@ -1,20 +1,21 @@
-function getFilesByText(directory, text, format){
+function getFilesByText(directory, text, format) {
 
+    showPrompt("Начат поиск файлов...", true);
     $.get(
-      "/getFilesByText" ,
+        "/getFilesByText",
         {
-            selectedDirectory:directory,
-            text:text,
-            fileFormat:format
+            selectedDirectory: directory,
+            text: text,
+            fileFormat: format
         }
-        ,function (serverAnswer) {
+        , function (serverAnswer) {
 
-          var msg = serverAnswer.message.messageText;
-          var success = serverAnswer.message.success;
-          var entity = serverAnswer.entity;
+            var msg = serverAnswer.message.messageText;
+            var success = serverAnswer.message.success;
+            var entity = serverAnswer.entity;
 
-          showPrompt(msg,success);
-          displayFoundFiles(entity, text);
+            showPrompt(msg, success);
+            displayFoundFiles(entity, text);
 
         }
     );
