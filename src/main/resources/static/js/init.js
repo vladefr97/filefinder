@@ -1,9 +1,4 @@
-var findFileButton = document.getElementById("file-path-button");
-findFileButton.addEventListener("click", function () {
 
-    displayModalWindow();
-});
-//
 $(document).ready(function () {
     /* $("#content").sortable();
      $("#content").disableSelection();*/
@@ -70,7 +65,7 @@ function displayRootFiles() {
             var content = document.getElementById("content");
 
             $(olElement).appendTo(content);
-            setSortable();
+            /*setSortable();*/
         }
 
     };

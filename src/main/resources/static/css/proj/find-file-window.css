@@ -1,0 +1,55 @@
+.find-file-window {
+    position: fixed;
+    left: 0;
+    right: 0;
+    margin: 50px auto;
+    border: 2px solid #2196f3;
+    width: 370px;
+    padding-left: 20px;
+    font-size: 15px;
+    font-family: 'DejaVu Serif', Georgia, "Times New Roman", Times, serif;
+
+    /*display:none;*/
+    background-color: white;
+    z-index:100;
+
+}
+
+.find-file-window input[type="text"] {
+
+    display: block;
+    margin-bottom: 20px;
+    margin-top: 5px;
+    width: 320px;
+    height: 40px;
+    border-radius: 5px 5px 5px 5px;
+    border: 2px solid #2196f3;
+    box-shadow: inset 1px 1px 5px #2196f3;
+    font-size: 20px;
+    font-weight: normal;
+    padding-left: 5px;
+
+}
+
+.find-file-window .checkbox {
+    margin-top: 20px;
+    padding-top: 5px;
+
+}
+.find-file-window .custom-select{
+    margin-bottom: 10px;
+}
+.find-file-window button{
+    position: absolute;
+    right:30px;
+    bottom: 10px;
+    padding: 5px 20px;
+    border: 2px solid #2196f3;
+    background-color: white;
+    color: #2196f3;
+
+}
+.find-file-window button:hover{
+
+    cursor: pointer;
+}

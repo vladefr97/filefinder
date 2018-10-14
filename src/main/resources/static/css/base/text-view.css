@@ -1,0 +1,7 @@
+
+.file-text{
+    background-color: rgba(12, 255, 20, 0.48);
+}
+.file-text.selected{
+    background-color: #fffd30;
+}

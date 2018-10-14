@@ -2,58 +2,57 @@ package com.vladefr97.filefinder.controller;
 
 
 import com.vladefr97.filefinder.entity.FileModel;
+import com.vladefr97.filefinder.entity.FileView;
 import com.vladefr97.filefinder.entity.Message;
+import com.vladefr97.filefinder.entity.ServerAnswer;
 import org.springframework.web.bind.annotation.*;
 
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.AccessDeniedException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Scanner;
+import java.util.*;
+import java.util.List;
+import java.util.logging.Logger;
 
 @RestController
 public class DataController {
+
+    private static Logger log = Logger.getLogger(DataController.class.getName());
 
     public static void main(String[] args) {
 
     }
 
-    @RequestMapping(value = "/renameFile", method = RequestMethod.GET)
-    public Message renameFile(@RequestParam("directory") String directoryName, @RequestParam("oldFileName") String oldFileName, @RequestParam("newFileName") String newFileName) {
+    @RequestMapping(value = "/getFilesByText", method = RequestMethod.GET)
+    public ServerAnswer getFilesByText(@RequestParam("selectedDirectory") String dirPath, @RequestParam("text") String text, @RequestParam("fileFormat") String fileFormat) throws IOException {
 
-        File file = new File(oldFileName);
-        newFileName = directoryName + "/" + newFileName;
-        boolean done = file.renameTo(new File(newFileName));
-        if (done)
-            return new Message("Файл успешно переименован", true);
-        else
-            return new Message("Не удалось переименовать файл...", false);
-    }
+        File file = new File(dirPath);
+        List<FileView> fileViewList = new ArrayList<>();
+        try {
 
-    @RequestMapping(value = "/createFile", method = RequestMethod.POST)
-    public Message createFile(@RequestParam("directory") String directoryName, @RequestParam("fileName") String fileName, @RequestParam("isFile") boolean isFile) {
-
-        String filePath = directoryName + "/" + fileName;
-        File file = new File(filePath);
-        boolean done;
-        if (isFile) {
-            try {
-                done = file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return new Message(e.getMessage(), false);
-
+            if (!file.isDirectory()) {
+                fileViewList.add(new FileView(file.getName(), readUsingScanner(file.getAbsolutePath())));
+            } else {
+                log.info("reading File");
+                File[] fileList = Objects.requireNonNull(file.listFiles(file1 -> file1.getName().endsWith(fileFormat)));
+                for (File aFileList : fileList)
+                    fileViewList.add(new FileView(aFileList.getName(), readUsingScanner(aFileList.getAbsolutePath())));
             }
-        } else {
-            done = file.mkdir();
+        } catch (Exception e) {
+            return new ServerAnswer<>(new Message(e.toString(), false), null);
         }
-        System.out.println(directoryName);
-        System.out.println(fileName);
-        if (done)
-            return new Message("Файл успешно создан!", true);
-        else return new Message("Не удалось создать файл", false);
+
+        Message msg;
+        if (fileViewList.size() != 0)
+            msg = new Message("Найденны файлы", true);
+        else msg = new Message("Не удалось ничего найти...", false);
+
+        return new ServerAnswer<>(msg, fileViewList);
     }
 
 
@@ -111,6 +110,35 @@ public class DataController {
         }
 
 
+    }
+
+    private static String readUsingFile(File file) throws IOException {
+        List<String> lines = Files.readAllLines(Paths.get(file.getAbsolutePath()), Charset.defaultCharset());
+        StringBuilder result = new StringBuilder();
+        for (String item : lines)
+            result.append(item);
+
+        return result.toString();
+    }
+
+    private static String readUsingFileReader(File file) {
+        StringBuilder resultString = new StringBuilder();
+
+        try {
+            FileInputStream fin = new FileInputStream(file);
+            InputStreamReader inputStreamReader = new InputStreamReader(fin, StandardCharsets.US_ASCII);
+            BufferedReader br = new BufferedReader(inputStreamReader);
+            String line;
+            while ((line = br.readLine()) != null) {
+                resultString.append(line);
+            }
+        } catch (IOException e) {
+            return e.toString();
+
+        }
+
+
+        return resultString.toString();
     }
 
     private static String readUsingScanner(String fileName) throws IOException {

@@ -1,4 +1,8 @@
-.accordeon{
+.accordeon {
     height: 800px;
-overflow: -moz-scrollbars-vertical;
+    margin-right: 10px;
+}
+
+.accordeon ol {
+    border: none;
 }

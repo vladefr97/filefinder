@@ -21,6 +21,10 @@
     <script src="js/displayNode.js" type="text/javascript" rel="script"></script>
     <script src="js/createNewFile.js" type="text/javascript" rel="script"></script>
     <script src="js/ajax/renameFile.js" type="text/javascript" rel="script"></script>
+    <script src="js/ajax/getFileByText.js" type="text/javascript" rel="script"></script>
+    <script src="js/toggle.js" type="text/javascript" rel="script"></script>
+    <script src="js/base-elements/showPrompt.js" type="text/javascript" rel="script"></script>
+    <script src="js/displayFoundFiles.js" type="text/javascript" rel="script"></script>
     <link href="css/common.css" type="text/css" rel="stylesheet">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 
@@ -31,7 +35,8 @@
 </div>
 
 <h1 class="header-text">File Finder</h1>
-
+<div class="prompt">
+</div>
 
 <!--<script>
     $(function () {
@@ -39,17 +44,38 @@
         $("#sortable").disableSelection();
     });
 </script>-->
+<div class="modal-window" id="modal-find-file">
+    <div class="find-file-window">
+
+        <span class="close" id="close-find-file">&times;</span>
+        <label for="check-find-file" class="checkbox">Искать в текущей директории
+            <input type="checkbox" id="check-find-file" checked onclick="toggleEnabled('file-path')">
+            <span class="checkmark"></span>
+        </label>
+        <input type="text" id="path-find-file" disabled>
+        <label for="text-find-file">Текст для поиска: <input type="text" id="text-find-file"></label>
+        <div class="custom-select" style="width: 200px">
+            <select id="select-find-file">
+                <option value="log">.log файл</option>
+                <option value="txt">.txt файл</option>
+                <option value="java">.java файл</option>
+                <option value="html">.html файл</option>
+                <option value="css">.css файл</option>
+                <option value="js">.js файл</option>
+                <option value="docx">.docx файл</option>
+                <option value="odt">.odt файл</option>
+            </select>
+        </div>
+        <button id="ok-find-file">Найти</button>
+    </div>
+</div>
 
 <div class="container-fluid">
 
     <div class="main-buttons">
-        <button type="button" class="btn btn-success" id="find-file-button">Найти текст
-        </button>
-        <button type="button" class="btn btn-success" id="file-path-button">Ввести путь к файлу
-        </button>
-        <button type="button" class="btn btn-primary" id="next-text-button">Предыдущий текст</button>
-        <button type="button" class="btn btn-primary" id="prev-text-button">Следующий текст
-        </button>
+        <button type="button" class="btn btn-success" id="find-file-button">Найти текст</button>
+        <button type="button" class="btn btn-primary" id="prev-text-button">Предыдущий текст</button>
+        <button type="button" class="btn btn-primary" id="next-text-button">Следующий текст</button>
     </div>
 
 
@@ -62,83 +88,21 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="row">файлы
+            <div class="row">
                 <div class="accordeon">
 
-                    <ol>
-                        <li>
-                            <div class="file-view">
-                                <div class="file-header" onclick="">Lorem ipsum dolor sit amet.
+                    <ol id="accordeon-content">
 
-                                </div>
-                                <div class="file-content">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad deserunt distinctio,
-                                    dolor eaque illo illum iste laboriosam magni molestiae mollitia nemo, quos tempore
-                                    voluptates. Animi asperiores cumque, delectus dicta dignissimos doloribus fuga ipsam
-                                    iste iure maiores quaerat quas rem, sequi?
-
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="file-view">
-                                <div class="file-header">
-                                    Lorem ipsum.
-                                </div>
-                                <div class="file-content">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur dolore, esse!
-                                    Aut facilis reiciendis voluptate?
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="file-view">
-                                <div class="file-header">Lorem.
-
-                                </div>
-                                <div class="file-content">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae commodi excepturi,
-                                    impedit ipsa laboriosam minima natus quas quibusdam sed unde. Amet atque ex id,
-                                    inventore iure tempora ut veniam vero.
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="file-view">
-                                <div class="file-header">
-                                    Lorem ipsum.
-                                </div>
-                                <div class="file-content">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam, beatae cupiditate
-                                    est excepturi expedita ipsa laudantium mollitia officia quod reiciendis, sed velit?
-                                    Alias consectetur deserunt dolorem et ex incidunt porro, rem tempora ut vel! Amet
-                                    eum explicabo officiis quibusdam reprehenderit.
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="file-view">
-                                <div class="file-header">
-                                    Lorem.
-                                </div>
-                                <div class="file-content">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur cum dolor
-                                    error exercitationem fuga in molestias, nesciunt nisi nobis ratione temporibus ut
-                                    veritatis. Architecto cumque deleniti doloribus est facere, unde.
-                                </div>
-                            </div>
-                        </li>
                     </ol>
 
                 </div>
             </div>
-            <div class="row">текст</div>
+
         </div>
 
     </div>
 
 </div>
-
 
 
 <div class="modal-window" id="modal">
@@ -155,6 +119,7 @@
     </div>
 
 </div>
+
 <!--
 <div id="create-window" class="modal-window">
 
@@ -192,7 +157,12 @@
 -->
 
 <!--<script src="js/sortable.js" rel="script" type="text/javascript"></script>-->
+
 <script src="js/init.js" type="text/javascript" rel="script"></script>
-<script src="js/accordeonAnimation.js" rel="script" type="text/javascript"></script>
+<script src="js/base-elements/selectVisualization.js" type="text/javascript" rel="script"></script>
+<script src="js/accordeonVisualize.js" rel="script" type="text/javascript"></script>
+<script src="js/base-elements/main-buttons-functions/findFileButton.js" type="text/javascript" rel="script"></script>
+<script src="js/base-elements/main-buttons-functions/nextTextButton.js" type="text/javascript" rel="script"></script>
+<script src="js/base-elements/main-buttons-functions/prevTextButton.js" type="text/javascript" rel="script"></script>
 </body>
 </html>

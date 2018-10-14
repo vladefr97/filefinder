@@ -8,6 +8,10 @@
 @import "base/fileview.css";
 @import "base/accordeon.css";
 @import "base/mainButtons.css";
+@import "proj/find-file-window.css";
+@import "base/checkbox.css";
+@import "base/select.css";
+@import "base/text-view.css";
 @import "proj/list.css";
 
 
