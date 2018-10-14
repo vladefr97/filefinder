@@ -1,6 +1,7 @@
 function displayFoundFiles(fileViews, text) {
     var content = document.getElementById("accordeon-content");
 
+    content.innerHTML="";
     for (var fileView of fileViews) {
 
         var liElement = document.createElement('li');

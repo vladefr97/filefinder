@@ -13,7 +13,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.List;
@@ -30,10 +29,10 @@ public class DataController {
 
     @RequestMapping(value = "/getFilesByText", method = RequestMethod.GET)
     public ServerAnswer getFilesByText(@RequestParam("selectedDirectory") String dirPath, @RequestParam("text") String text, @RequestParam("fileFormat") String fileFormat) throws IOException {
-
         File file = new File(dirPath);
-        List<FileView> fileViewList = new ArrayList<>();
-        try {
+        List<FileView> fileViewList;
+
+     /*   try {
 
             if (!file.isDirectory()) {
                 fileViewList.add(new FileView(file.getName(), readUsingScanner(file.getAbsolutePath())));
@@ -45,8 +44,10 @@ public class DataController {
             }
         } catch (Exception e) {
             return new ServerAnswer<>(new Message(e.toString(), false), null);
-        }
+        }*/
 
+        log.info("Started finding files...");
+        fileViewList = findAllFilesInDirectory(file, fileFormat, text);
         Message msg;
         if (fileViewList.size() != 0)
             msg = new Message("Найденны файлы", true);
@@ -71,10 +72,9 @@ public class DataController {
 
     @RequestMapping("/getFile/{filePath}")
     public FileModel[] getChildFiles(@PathVariable String filePath) {
-        System.out.println(filePath);
-        filePath = filePath.replace("<prefix>", "/");
 
-        System.out.println(filePath);
+        filePath = filePath.replace("<prefix>", "/");
+        log.info("Opening: " + filePath);
         File file = new File("/" + filePath);
 
 
@@ -103,10 +103,40 @@ public class DataController {
                 result = readUsingScanner(filePath);
             } catch (AccessDeniedException e) {
                 return e.toString();
-            } catch (IOException e) {
+            } catch (IOException | NoSuchElementException e) {
                 e.printStackTrace();
             }
             return result;
+        }
+
+
+    }
+
+    private static List<FileView> findAllFilesInDirectory(File file, String fileFormat, String text) {
+
+        log.info("exploring file: " + file.getAbsolutePath());
+        if (file.isDirectory()) {
+            File[] childFiles = Objects.requireNonNull(file.listFiles());
+            List<FileView> finalList = new ArrayList<>();
+            for (File childFile : childFiles) {
+                List<FileView> foundData = findAllFilesInDirectory(childFile, fileFormat, text);
+                if (foundData != null)
+                    finalList.addAll(foundData);
+            }
+            return finalList;
+        } else {
+            List<FileView> resultList = new ArrayList<>();
+            try {
+                if (file.getName().endsWith(fileFormat)) {
+                    String content = readUsingScanner(file.getAbsolutePath());
+                    if (content.contains(text))
+                        resultList.add(new FileView(file.getName(), content));
+                } else return null;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+            return resultList;
         }
 
 
@@ -123,7 +153,6 @@ public class DataController {
 
     private static String readUsingFileReader(File file) {
         StringBuilder resultString = new StringBuilder();
-
         try {
             FileInputStream fin = new FileInputStream(file);
             InputStreamReader inputStreamReader = new InputStreamReader(fin, StandardCharsets.US_ASCII);
@@ -141,7 +170,7 @@ public class DataController {
         return resultString.toString();
     }
 
-    private static String readUsingScanner(String fileName) throws IOException {
+    private static String readUsingScanner(String fileName) throws IOException, NoSuchElementException {
         Scanner scanner = new Scanner(Paths.get(fileName), StandardCharsets.UTF_8.name());
         //здесь мы можем использовать разделитель, например: "\\A", "\\Z" или "\\z"
         String data = scanner.useDelimiter("\\A").next();
