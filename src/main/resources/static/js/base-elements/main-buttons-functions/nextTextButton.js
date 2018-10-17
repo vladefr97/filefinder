@@ -10,6 +10,10 @@ nextTextBtn.onclick = function () {
     var curTxt = document.querySelector(".file-view.chosen span[data-txt-n=\'" + curNum + "\']");
     var prevTxt = document.querySelector(".file-view.chosen span[data-txt-n=\'" + prevNum + "\']");
 
+    if(minNum===maxNum){
+        curTxt.setAttribute("class","file-text chosen");
+        return;
+    }
     if (curNum < maxNum) {
 
         if (curNum - 1 >= minNum) {
