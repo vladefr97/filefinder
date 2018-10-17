@@ -22,11 +22,19 @@ import java.util.logging.Logger;
 public class DataController {
 
     private static Logger log = Logger.getLogger(DataController.class.getName());
+    private static String status;
 
     public static void main(String[] args) {
 
     }
 
+    @RequestMapping(value = "/getStatus", method = RequestMethod.GET)
+    public String getStatus() {
+
+        return status;
+    }
+
+    /*Returns subfiles of selected file*/
     @RequestMapping(value = "/getNodeFiles", method = RequestMethod.GET)
     public FileModel[] getNodeFiles(@RequestParam("filePath") String filePath) {
         filePath = filePath.replace("<prefix>", "/");
@@ -43,6 +51,7 @@ public class DataController {
         return fileModels;
     }
 
+    /*Finds files by target text and format*/
     @RequestMapping(value = "/getFilesByText", method = RequestMethod.GET)
     public ServerAnswer getFilesByText(@RequestParam("selectedDirectory") String dirPath, @RequestParam("text") String text, @RequestParam("fileFormat") String fileFormat) throws IOException {
         File file = new File(dirPath);
@@ -59,6 +68,7 @@ public class DataController {
     }
 
 
+    /*Returns the root files on computer*/
     @RequestMapping("/rootFiles")
     public FileModel[] rootFiles() {
         File[] roots = File.listRoots()[0].listFiles();
@@ -71,73 +81,31 @@ public class DataController {
 
     }
 
-/*
-    @RequestMapping("/getFile/{filePath}")
-    public FileModel[] getChildFiles(@PathVariable String filePath) {
-
-        filePath = filePath.replace("<prefix>", "/");
-        log.info("Opening: " + filePath);
-        File file = new File("/" + filePath);
-
-
-        File[] resultFiles = file.listFiles();
-        if (resultFiles == null) return null;
-        FileModel[] fileModels = new FileModel[resultFiles.length];
-
-        for (int i = 0; i < fileModels.length; i++)
-            fileModels[i] = new FileModel(resultFiles[i].getName(), resultFiles[i].getAbsolutePath(), resultFiles[i].isDirectory());
-        return fileModels;
-    }*/
-
-    @RequestMapping("/getFileText/{filePath}")
-    public String getFileText(@PathVariable String filePath) throws IOException {
-
-        filePath = filePath.replace("<prefix>", "/");
-        Desktop desktop = null;
-        if (Desktop.isDesktopSupported()) {
-            desktop = Desktop.getDesktop();
-            desktop.open(new File(filePath));
-            return "";
-        } else {
-
-            String result = null;
-            try {
-                result = readUsingScanner(filePath);
-            } catch (AccessDeniedException e) {
-                return e.toString();
-            } catch (IOException | NoSuchElementException e) {
-                e.printStackTrace();
-            }
-            return result;
-        }
-
-
-    }
-
     private static List<FileView> findAllFilesInDirectory(File file, String fileFormat, String text) {
 
         try {
-        log.info("exploring file: " + file.getAbsolutePath());
-        if (file.isDirectory()) {
-            File[] childFiles = Objects.requireNonNull(file.listFiles());
-            List<FileView> finalList = new ArrayList<>();
-            for (File childFile : childFiles) {
-                List<FileView> foundData = findAllFilesInDirectory(childFile, fileFormat, text);
-                if (foundData != null)
-                    finalList.addAll(foundData);
-            }
-            return finalList;
-        } else {
-            List<FileView> resultList = new ArrayList<>();
+            status = file.getAbsolutePath();
+            log.info("exploring file: " + status);
+            if (file.isDirectory()) {
+                File[] childFiles = Objects.requireNonNull(file.listFiles());
+                List<FileView> finalList = new ArrayList<>();
+                for (File childFile : childFiles) {
+                    List<FileView> foundData = findAllFilesInDirectory(childFile, fileFormat, text);
+                    if (foundData != null)
+                        finalList.addAll(foundData);
+                }
+                return finalList;
+            } else {
+                List<FileView> resultList = new ArrayList<>();
 
                 if (file.getName().endsWith(fileFormat)) {
                     String content = readUsingScanner(file.getAbsolutePath());
                     if (content.contains(text))
-                        resultList.add(new FileView(file.getName(), content));
+                        resultList.add(new FileView(file.getAbsolutePath(), content));
                 } else return null;
 
-            return resultList;
-        }
+                return resultList;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return null;

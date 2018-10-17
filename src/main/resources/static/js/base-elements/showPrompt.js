@@ -1,4 +1,4 @@
-function showPrompt(text, isSucceed){
+function showPrompt(text, isSucceed) {
     var prompt = $(".prompt")[0];
     prompt.innerText = text;
     if (isSucceed) {

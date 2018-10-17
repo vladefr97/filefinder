@@ -1,7 +1,4 @@
-
 $(document).ready(function () {
-    /* $("#content").sortable();
-     $("#content").disableSelection();*/
     displayRootFiles();
 
 });
@@ -36,7 +33,6 @@ function displayRootFiles() {
                     img.setAttribute("src", "https://icon-icons.com/icons2/93/PNG/32/page_document_16748.png")
 
                 }
-                //outerDiv.setAttribute("class","out-div");
                 divElement.setAttribute("data-isDirectory", files[i].directory.toString());
                 divElement.setAttribute("ondblclick", "displayNode(this)");
                 divElement.setAttribute("onclick", "setItemSelected(this)");
@@ -46,26 +42,13 @@ function displayRootFiles() {
                 spanElement.innerText = files[i].fileName;
                 divElement.appendChild(img);
                 divElement.appendChild(spanElement);
-                //$(divElement).draggable();
-
                 liElement.appendChild(divElement);
-
-                // liElement.appendChild(pElement);
                 olElement.appendChild(liElement);
-                /*liElement.setAttribute("class","ui-state-default");*/
                 olElement.setAttribute("class", "sortable");
-                /*$(olElement).sortable({
-                    connectWith: ".tree-node"
-                });
-                $(olElement).droppable();
-                $(olElement).disableSelection();*/
             }
 
-
             var content = document.getElementById("content");
-
             $(olElement).appendTo(content);
-            /*setSortable();*/
         }
 
     };

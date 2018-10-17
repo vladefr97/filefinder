@@ -24,7 +24,6 @@ function getNodeFiles(filePath, element) {
                     img.setAttribute("src", "https://icon-icons.com/icons2/93/PNG/32/page_document_16748.png")
 
                 }
-                //outerDiv.setAttribute("class","out-div");
                 divElement.setAttribute("data-isDirectory", files[i].directory.toString());
                 divElement.setAttribute("ondblclick", "displayNode(this)");
                 divElement.setAttribute("onclick", "setItemSelected(this)");
@@ -35,16 +34,11 @@ function getNodeFiles(filePath, element) {
                 divElement.appendChild(img);
                 divElement.appendChild(spanElement);
                 liElement.appendChild(divElement);
-                /*  $(liElement).draggable();*/
-
-                // liElement.appendChild(pElement);
                 olElement.appendChild(liElement);
-                /* $(olElement).droppable();*/
             }
 
             var parentElement = element.parentElement;
             $(olElement).appendTo(parentElement);
-            setSortable();
         }
     );
 }

@@ -1,9 +1,9 @@
 package com.vladefr97.filefinder.entity;
 
-public class ServerAnswer<Message,Entity> {
+public class ServerAnswer<Message, Entity> {
 
-    Message message;
-    Entity entity;
+    Message message;//Message from server
+    Entity entity;//Entity in server answer
 
     public ServerAnswer(Message message, Entity entity) {
         this.message = message;

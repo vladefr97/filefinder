@@ -28,8 +28,8 @@ function collapseNode(element) {
 function openNode(element) {
     element.setAttribute("data-clicked", "false");
     var img = element.childNodes[0];
-    img.style.display="none";
-   // element.removeChild(img);
+    img.style.display = "none";
+    // element.removeChild(img);
     var loader = document.createElement('div');
     loader.setAttribute("class", "loader");
     $(loader).appendTo(element);
@@ -37,10 +37,10 @@ function openNode(element) {
 }
 
 
-
 function fileAnimation(element) {
 
 }
+
 function directoryAnimation(element) {
     var isClicked = $(element).attr("data-clicked");
     if (isClicked == "true")

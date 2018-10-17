@@ -24,7 +24,6 @@ function refreshAccordeon() {
         i++;
     }
 
-
     for (var item of accordeonHeaders) {
         item.onclick = function () {
 

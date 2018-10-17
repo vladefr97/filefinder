@@ -18,7 +18,6 @@ prevTextBtn.onclick = function () {
         if (curNum === 1) {
             prevTxt.setAttribute("class", "file-text chosen");
             var curTxt = document.querySelector(".file-view.chosen span[data-txt-n=\'" + curNum + "\']");
-          /*  curTxt.setAttribute("class", "file-text chosen");*/
 
         }
     }

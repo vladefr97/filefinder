@@ -1,4 +1,8 @@
+/*Request to the server in order to get files by specified text*/
 function getFilesByText(directory, text, format) {
+
+    var answerd = false;
+    var content = document.getElementById("accordeon-content");
 
     showPrompt("Начат поиск файлов...", true);
     $.get(
@@ -10,6 +14,7 @@ function getFilesByText(directory, text, format) {
         }
         , function (serverAnswer) {
 
+            answerd = true;
             var msg = serverAnswer.message.messageText;
             var success = serverAnswer.message.success;
             var entity = serverAnswer.entity;
@@ -19,6 +24,5 @@ function getFilesByText(directory, text, format) {
 
         }
     );
-
 
 }
